@@ -1,4 +1,7 @@
-if not game:IsLoaded() then game.Loaded:Wait() end
+-- PAKAI INI SEBAGAI GANTINYA (JAUH LEBIH AMAN BUAT LOADSTRING):
+if not game:IsLoaded() then 
+    repeat task.wait(1) until game:IsLoaded() 
+end
 
 local Players = game:GetService("Players")
 local LocalPlayer = Players.LocalPlayer
