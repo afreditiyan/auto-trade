@@ -1,10 +1,10 @@
 -- =========================================================
--- SCRIPT GABUNGAN: AUTO KONTRIBUSI + SCAN & BELI HERB + WHITELIST
+-- SCRIPT GABUNGAN: AUTO KONTRIBUSI (SILENT) + SCAN & BELI HERB
 -- =========================================================
 
 local TargetItemName = "Herb"
 local MaksimalRefresh = 4
-local WhitelistNames = { ["mainuhuy"] = true } -- Akun Utama lu
+local WhitelistNames = { ["mainuhuy"] = true }
 
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
@@ -23,7 +23,7 @@ local function ScanDanBeliHerbLive()
             local btn = item:FindFirstChild("按钮")
             if btn then
                 local nameObj = btn:FindFirstChild("名称")
-                if string.lower(nameObj.Text) == string.lower(TargetItemName) then
+                if nameObj and string.lower(nameObj.Text) == string.lower(TargetItemName) then
                     firesignal(btn.Activated)
                     task.wait(0.4) 
                 end
@@ -33,32 +33,24 @@ local function ScanDanBeliHerbLive()
 end
 
 -- =========================================================
--- EKSEKUSI DENGAN LOGIKA WHITELIST
+-- EKSEKUSI (SILENT MODE)
 -- =========================================================
 task.spawn(function()
-    if WhitelistNames[MyAccountName] then
-        -- Jika Akun Utama: Cuma beli herb, gak usah kontribusi
-        for urutan = 1, MaksimalRefresh do
-            ScanDanBeliHerbLive()
-            if urutan < MaksimalRefresh then
-                RefreshRemote:FireServer()
-                task.wait(1.5)
-            end
-        end
-    else
-        -- Jika Akun Tuyul: Kontribusi dulu baru beli herb
-        for i = 1, 5 do
+    if not WhitelistNames[MyAccountName] then
+        -- Akun Tuyul: Kontribusi Silent 10x
+        for i = 1, 10 do
             contriEvent:FireServer()
-            task.wait(0.5)
+            task.wait(0.6)
         end
         task.wait(1.5)
-        
-        for urutan = 1, MaksimalRefresh do
-            ScanDanBeliHerbLive()
-            if urutan < MaksimalRefresh then
-                RefreshRemote:FireServer()
-                task.wait(1.5)
-            end
+    end
+    
+    -- Proses Belanja (Sama untuk semua akun)
+    for urutan = 1, MaksimalRefresh do
+        ScanDanBeliHerbLive()
+        if urutan < MaksimalRefresh then
+            RefreshRemote:FireServer()
+            task.wait(1.5)
         end
     end
 end)
