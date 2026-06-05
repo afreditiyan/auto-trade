@@ -23,7 +23,7 @@ local function ScanDanBeliHerbLive()
             local btn = item:FindFirstChild("按钮")
             if btn then
                 local nameObj = btn:FindFirstChild("名称")
-                if nameObj and string.find(string.lower(nameObj.Text), string.lower(TargetItemName)) then
+                if string.lower(nameObj.Text) == string.lower(TargetItemName) then
                     firesignal(btn.Activated)
                     task.wait(0.4) 
                 end
