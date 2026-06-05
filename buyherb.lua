@@ -49,7 +49,7 @@ task.spawn(function()
         -- Jika Akun Tuyul: Kontribusi dulu baru beli herb
         for i = 1, 5 do
             contriEvent:FireServer()
-            task.wait(0.3)
+            task.wait(0.5)
         end
         task.wait(1.5)
         
